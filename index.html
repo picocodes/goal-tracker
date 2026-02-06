@@ -106,9 +106,11 @@
                     <h3>Update Progress</h3>
                     <form id="updateForm">
                         <div class="form-group inline">
-                            <label for="newCurrentValue">New Current Value</label>
-                            <input type="number" id="newCurrentValue" min="0" step="any" required>
-                            <button type="submit" class="btn btn-secondary">Update</button>
+                            <div style="flex: 1;">
+                                <label for="newCurrentValue">New Current Value</label>
+                                <input type="number" id="newCurrentValue" min="0" step="any" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary" style="align-self: flex-end;">Update</button>
                         </div>
                     </form>
                 </div>

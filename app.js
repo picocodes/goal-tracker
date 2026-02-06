@@ -2,6 +2,8 @@
 class GoalTracker {
     constructor() {
         this.goal = null;
+        this.DAYS_PER_WEEK = 7;
+        this.DAYS_PER_MONTH = 30;
         this.init();
     }
 
@@ -157,8 +159,8 @@ class GoalTracker {
 
         // Calculate required contribution rates
         const dailyRequired = daysLeft > 0 ? remaining / daysLeft : 0;
-        const weeklyRequired = daysLeft > 0 ? (remaining * 7) / daysLeft : 0;
-        const monthlyRequired = daysLeft > 0 ? (remaining * 30) / daysLeft : 0;
+        const weeklyRequired = daysLeft > 0 ? (remaining * this.DAYS_PER_WEEK) / daysLeft : 0;
+        const monthlyRequired = daysLeft > 0 ? (remaining * this.DAYS_PER_MONTH) / daysLeft : 0;
 
         // Calculate expected progress
         const expectedProgress = timeElapsed > 0 ? (timeElapsed / totalDays) * targetValue : 0;
@@ -235,7 +237,7 @@ class GoalTracker {
             return (num / 1000000).toFixed(2) + 'M';
         } else if (num >= 1000) {
             return (num / 1000).toFixed(2) + 'K';
-        } else if (num % 1 === 0) {
+        } else if (Number.isInteger(num)) {
             return num.toString();
         } else {
             return num.toFixed(2);

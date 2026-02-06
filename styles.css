@@ -73,7 +73,7 @@ main {
     align-items: flex-end;
 }
 
-.form-group.inline input {
+.form-group.inline > div {
     flex: 1;
 }
 
