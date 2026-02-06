@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Goal Tracker</h1>
+            <p class="subtitle">Track your progress and stay motivated</p>
+        </header>
+
+        <main>
+            <!-- Create Goal Form -->
+            <section id="createGoalSection" class="section">
+                <h2>Create Your Goal</h2>
+                <form id="goalForm">
+                    <div class="form-group">
+                        <label for="goalName">Goal Name</label>
+                        <input type="text" id="goalName" required placeholder="e.g., Save for vacation">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="targetValue">Target Value</label>
+                        <input type="number" id="targetValue" min="0" step="any" required placeholder="e.g., 5000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentValue">Current Value</label>
+                        <input type="number" id="currentValue" min="0" step="any" required placeholder="e.g., 500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="targetDate">Target Date</label>
+                        <input type="date" id="targetDate" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Create Goal</button>
+                </form>
+            </section>
+
+            <!-- Goal Display Section -->
+            <section id="goalDisplaySection" class="section hidden">
+                <div class="goal-header">
+                    <h2 id="displayGoalName"></h2>
+                    <button id="deleteGoalBtn" class="btn btn-danger">Delete Goal</button>
+                </div>
+                
+                <!-- Progress Circle -->
+                <div class="progress-container">
+                    <div class="progress-circle">
+                        <svg width="200" height="200">
+                            <circle cx="100" cy="100" r="90" class="progress-ring-bg"></circle>
+                            <circle cx="100" cy="100" r="90" class="progress-ring" id="progressRing"></circle>
+                        </svg>
+                        <div class="progress-text">
+                            <span id="progressPercentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Status -->
+                <div class="status-card">
+                    <div class="status-row">
+                        <span class="label">Current Progress:</span>
+                        <span id="currentProgress" class="value">0 / 0</span>
+                    </div>
+                    <div class="status-row">
+                        <span class="label">Remaining:</span>
+                        <span id="remaining" class="value">0</span>
+                    </div>
+                    <div class="status-row">
+                        <span class="label">Days Left:</span>
+                        <span id="daysLeft" class="value">0</span>
+                    </div>
+                    <div class="status-row on-track">
+                        <span class="label">Status:</span>
+                        <span id="trackStatus" class="value badge">Calculating...</span>
+                    </div>
+                </div>
+
+                <!-- Target Contributions -->
+                <div class="targets-card">
+                    <h3>Target Contributions</h3>
+                    <div class="targets-grid">
+                        <div class="target-item">
+                            <div class="target-label">Daily</div>
+                            <div id="dailyTarget" class="target-value">0</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="target-label">Weekly</div>
+                            <div id="weeklyTarget" class="target-value">0</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="target-label">Monthly</div>
+                            <div id="monthlyTarget" class="target-value">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Current Value -->
+                <div class="update-section">
+                    <h3>Update Progress</h3>
+                    <form id="updateForm">
+                        <div class="form-group inline">
+                            <label for="newCurrentValue">New Current Value</label>
+                            <input type="number" id="newCurrentValue" min="0" step="any" required>
+                            <button type="submit" class="btn btn-secondary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Made with ❤️ for goal achievers</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
