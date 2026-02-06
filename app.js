@@ -63,7 +63,7 @@ class GoalTracker {
         const targetDate = document.getElementById('targetDate').value;
 
         if (new Date(startDate) > new Date(targetDate)) {
-            alert('Start date must be on or before the target date.');
+            alert(`Start date (${startDate}) must be on or before target date (${targetDate}).`);
             return;
         }
 
@@ -275,7 +275,7 @@ class GoalTracker {
 
     formatDateInput(value) {
         const date = new Date(value);
-        if (Number.isNaN(date.getTime())) {
+        if (isNaN(date)) {
             return '';
         }
         return date.toISOString().split('T')[0];
