@@ -2,6 +2,7 @@
 class GoalTracker {
     constructor() {
         this.goal = null;
+        this.isEditing = false;
         this.DAYS_PER_WEEK = 7;
         this.DAYS_PER_MONTH = 30;
         this.init();
@@ -38,27 +39,58 @@ class GoalTracker {
             }
         });
 
+        // Edit button
+        document.getElementById('editGoalBtn').addEventListener('click', () => {
+            this.startEditing();
+        });
+
+        // Cancel edit button
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            this.cancelEditing();
+        });
+
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('targetDate').setAttribute('min', today);
+        document.getElementById('startDate').value = today;
     }
 
     createGoal() {
         const name = document.getElementById('goalName').value;
         const targetValue = parseFloat(document.getElementById('targetValue').value);
         const currentValue = parseFloat(document.getElementById('currentValue').value);
+        const startDate = document.getElementById('startDate').value;
         const targetDate = document.getElementById('targetDate').value;
 
-        this.goal = {
-            name,
-            targetValue,
-            currentValue,
-            targetDate,
-            createdAt: new Date().toISOString()
-        };
+        if (new Date(startDate) > new Date(targetDate)) {
+            alert('Start date must be on or before the target date.');
+            return;
+        }
 
+        if (this.isEditing && this.goal) {
+            this.goal = {
+                ...this.goal,
+                name,
+                targetValue,
+                currentValue,
+                startDate,
+                targetDate
+            };
+        } else {
+            this.goal = {
+                name,
+                targetValue,
+                currentValue,
+                startDate,
+                targetDate,
+                createdAt: new Date().toISOString()
+            };
+        }
+
+        this.isEditing = false;
         this.saveGoal();
         this.updateDisplay();
+        this.resetForm();
     }
 
     updateCurrentValue() {
@@ -74,11 +106,12 @@ class GoalTracker {
 
     deleteGoal() {
         this.goal = null;
+        this.isEditing = false;
         localStorage.removeItem('goalTrackerData');
         this.updateDisplay();
         
         // Reset form
-        document.getElementById('goalForm').reset();
+        this.resetForm();
     }
 
     saveGoal() {
@@ -96,13 +129,16 @@ class GoalTracker {
         const createSection = document.getElementById('createGoalSection');
         const displaySection = document.getElementById('goalDisplaySection');
 
-        if (this.goal) {
+        if (this.goal && !this.isEditing) {
             createSection.classList.add('hidden');
             displaySection.classList.remove('hidden');
             this.displayGoalProgress();
         } else {
             createSection.classList.remove('hidden');
             displaySection.classList.add('hidden');
+            if (!this.isEditing) {
+                this.setFormMode('create');
+            }
         }
     }
 
@@ -145,7 +181,8 @@ class GoalTracker {
 
         // Calculate time metrics
         const now = new Date();
-        const createdAt = new Date(this.goal.createdAt);
+        const startDateValue = this.goal.startDate || this.goal.createdAt;
+        const createdAt = new Date(startDateValue);
         const targetDate = new Date(this.goal.targetDate);
         
         // Time elapsed in days
@@ -187,6 +224,61 @@ class GoalTracker {
             expectedProgress,
             status
         };
+    }
+
+    startEditing() {
+        if (!this.goal) {
+            return;
+        }
+
+        this.isEditing = true;
+        this.setFormMode('edit');
+        this.populateForm();
+        this.updateDisplay();
+    }
+
+    cancelEditing() {
+        this.isEditing = false;
+        this.updateDisplay();
+        this.resetForm();
+    }
+
+    populateForm() {
+        document.getElementById('goalName').value = this.goal.name;
+        document.getElementById('targetValue').value = this.goal.targetValue;
+        document.getElementById('currentValue').value = this.goal.currentValue;
+        document.getElementById('startDate').value = this.formatDateInput(this.goal.startDate || this.goal.createdAt);
+        document.getElementById('targetDate').value = this.goal.targetDate;
+    }
+
+    resetForm() {
+        document.getElementById('goalForm').reset();
+        document.getElementById('startDate').value = new Date().toISOString().split('T')[0];
+        this.setFormMode('create');
+    }
+
+    setFormMode(mode) {
+        const title = document.getElementById('goalFormTitle');
+        const submitButton = document.getElementById('goalFormSubmit');
+        const cancelButton = document.getElementById('cancelEditBtn');
+
+        if (mode === 'edit') {
+            title.textContent = 'Edit Goal';
+            submitButton.textContent = 'Save Changes';
+            cancelButton.classList.remove('hidden');
+        } else {
+            title.textContent = 'Create Your Goal';
+            submitButton.textContent = 'Create Goal';
+            cancelButton.classList.add('hidden');
+        }
+    }
+
+    formatDateInput(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return '';
+        }
+        return date.toISOString().split('T')[0];
     }
 
     updateProgressCircle(percentage) {

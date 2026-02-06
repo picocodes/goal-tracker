@@ -16,7 +16,7 @@
         <main>
             <!-- Create Goal Form -->
             <section id="createGoalSection" class="section">
-                <h2>Create Your Goal</h2>
+                <h2 id="goalFormTitle">Create Your Goal</h2>
                 <form id="goalForm">
                     <div class="form-group">
                         <label for="goalName">Goal Name</label>
@@ -32,13 +32,21 @@
                         <label for="currentValue">Current Value</label>
                         <input type="number" id="currentValue" min="0" step="any" required placeholder="e.g., 500">
                     </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" required>
+                    </div>
                     
                     <div class="form-group">
                         <label for="targetDate">Target Date</label>
                         <input type="date" id="targetDate" required>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">Create Goal</button>
+                    <div class="form-actions">
+                        <button type="submit" id="goalFormSubmit" class="btn btn-primary">Create Goal</button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary hidden">Cancel</button>
+                    </div>
                 </form>
             </section>
 
@@ -46,7 +54,10 @@
             <section id="goalDisplaySection" class="section hidden">
                 <div class="goal-header">
                     <h2 id="displayGoalName"></h2>
-                    <button id="deleteGoalBtn" class="btn btn-danger">Delete Goal</button>
+                    <div class="goal-actions">
+                        <button id="editGoalBtn" class="btn btn-secondary">Edit Goal</button>
+                        <button id="deleteGoalBtn" class="btn btn-danger">Delete Goal</button>
+                    </div>
                 </div>
                 
                 <!-- Progress Circle -->
