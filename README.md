@@ -5,6 +5,8 @@ A simple, elegant Single Page Application (SPA) to track your goals and stay mot
 ## Features
 
 - **Create Goals**: Set a goal with a target value and deadline
+- **Edit Goals**: Update goal details as your plans change
+- **Flexible Start Dates**: Choose the start date that matches your timeline
 - **Track Progress**: Monitor your current progress with a visual progress circle
 - **Smart Calculations**: Get daily, weekly, and monthly contribution targets
 - **Status Tracking**: See if you're on track, ahead, or behind schedule
@@ -13,11 +15,11 @@ A simple, elegant Single Page Application (SPA) to track your goals and stay mot
 
 ## How It Works
 
-1. **Create a Goal**: Enter your goal name, target value, current value, and target date
+1. **Create a Goal**: Enter your goal name, target value, current value, start date, and target date
 2. **View Progress**: See your progress percentage, remaining amount, and days left
 3. **Check Targets**: View how much you need to contribute daily, weekly, and monthly to meet your goal
 4. **Track Status**: The app calculates if you're on track based on:
-   - Time elapsed since goal creation
+- Time elapsed since your chosen start date
    - Current contribution vs expected contribution
    - Total contribution needed
    - Time remaining
