@@ -164,9 +164,14 @@ class GoalTracker {
         document.getElementById('daysLeft').textContent = progress.daysLeft;
 
         // Update expected completion date
-        document.getElementById('expectedCompletionDate').textContent = progress.expectedCompletionDate
-            ? this.formatDateInput(progress.expectedCompletionDate)
-            : 'Not enough data';
+        const expectedCompletionElement = document.getElementById('expectedCompletionDate');
+        if (progress.status === 'completed') {
+            expectedCompletionElement.textContent = 'Completed';
+        } else {
+            expectedCompletionElement.textContent = progress.expectedCompletionDate
+                ? this.formatDateInput(progress.expectedCompletionDate)
+                : 'Not enough data';
+        }
         
         // Update status
         this.updateStatus(progress);
@@ -206,16 +211,12 @@ class GoalTracker {
 
         // Expected completion date based on current rate
         let expectedCompletionDate = null;
-        if (targetValue > 0) {
-            if (remaining === 0) {
-                expectedCompletionDate = new Date(now);
-            } else if (currentValue > 0 && timeElapsed > 0) {
-                // Project completion assuming the current average daily rate continues.
-                const averageDailyRate = currentValue / timeElapsed;
-                if (Number.isFinite(averageDailyRate) && averageDailyRate > 0) {
-                    const daysToComplete = remaining / averageDailyRate;
-                    expectedCompletionDate = new Date(now.getTime() + (daysToComplete * MS_PER_DAY));
-                }
+        if (targetValue > 0 && remaining > 0 && currentValue > 0 && timeElapsed > 0) {
+            // Project completion assuming the current average daily rate (elapsed days) continues.
+            const averageDailyRate = currentValue / timeElapsed;
+            if (Number.isFinite(averageDailyRate) && averageDailyRate > 0) {
+                const daysToComplete = remaining / averageDailyRate;
+                expectedCompletionDate = new Date(now.getTime() + (daysToComplete * MS_PER_DAY));
             }
         }
 
