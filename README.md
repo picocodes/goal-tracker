@@ -8,7 +8,7 @@ A simple, elegant Single Page Application (SPA) to track your goals and stay mot
 - **Edit Goals**: Update goal details as your plans change
 - **Flexible Start Dates**: Choose the start date that matches your timeline
 - **Track Progress**: Monitor your current progress with a visual progress circle
-- **Expected Completion**: See the projected completion date at your current pace
+- **Expected Completion**: See the projected completion date assuming a consistent pace
 - **Smart Calculations**: Get daily, weekly, and monthly contribution targets
 - **Status Tracking**: See if you're on track, ahead, or behind schedule
 - **Data Persistence**: Your goals are saved locally in your browser
