@@ -174,10 +174,15 @@ class GoalTracker {
     }
 
     calculateProgress() {
-        const currentValue = this.goal.currentValue;
-        const targetValue = this.goal.targetValue;
+        const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+        const currentValue = Math.max(0, this.goal.currentValue);
+        const targetValue = Math.max(0, this.goal.targetValue);
+        
         const remaining = Math.max(0, targetValue - currentValue);
-        const percentage = Math.min(100, (currentValue / targetValue) * 100);
+        const percentage = targetValue > 0
+        ? Math.min(100, (currentValue / targetValue) * 100)
+        : 0;
 
         // Calculate time metrics
         const now = new Date();
@@ -186,38 +191,40 @@ class GoalTracker {
         const targetDate = new Date(this.goal.targetDate);
         
         // Time elapsed in days
-        const timeElapsed = Math.max(0, Math.floor((now - createdAt) / (1000 * 60 * 60 * 24)));
+        const timeElapsed = Math.max(0, (now - createdAt) / MS_PER_DAY);
         
         // Days left until target
-        const daysLeft = Math.max(0, Math.floor((targetDate - now) / (1000 * 60 * 60 * 24)));
+        const daysLeft = Math.max(0, (targetDate - now) / MS_PER_DAY);
         
         // Total days for the goal
-        const totalDays = Math.max(1, Math.floor((targetDate - createdAt) / (1000 * 60 * 60 * 24)));
+        const totalDays = Math.max(1, (targetDate - createdAt) / MS_PER_DAY);
 
         // Calculate required contribution rates
         const dailyRequired = daysLeft > 0 ? remaining / daysLeft : 0;
-        const weeklyRequired = daysLeft > 0 ? (remaining * this.DAYS_PER_WEEK) / daysLeft : 0;
-        const monthlyRequired = daysLeft > 0 ? (remaining * this.DAYS_PER_MONTH) / daysLeft : 0;
+        const weeklyRequired = daysLeft > 0 ? dailyRequired * this.DAYS_PER_WEEK : 0;
+        const monthlyRequired = daysLeft > 0 ? dailyRequired * this.DAYS_PER_MONTH : 0;
 
         // Calculate expected progress
-        const expectedProgress = timeElapsed > 0 ? (timeElapsed / totalDays) * targetValue : 0;
+        const expectedProgress = Math.min(targetValue, (timeElapsed / totalDays) * targetValue);
         
         // Determine if on track
         let status = 'on-track';
         if (percentage >= 100) {
             status = 'completed';
-        } else if (currentValue < expectedProgress && daysLeft > 0) {
+        } else if (daysLeft === 0 && percentage < 100) {
+            status = 'overdue';
+        } else if (currentValue < expectedProgress) {
             status = 'behind';
-        } else if (currentValue > expectedProgress && daysLeft > 0) {
+        } else if (currentValue > expectedProgress) {
             status = 'ahead';
         }
 
         return {
             percentage: percentage.toFixed(1),
             remaining,
-            daysLeft,
-            timeElapsed,
-            totalDays,
+            daysLeft: Math.ceil(daysLeft),
+            timeElapsed: Math.floor(timeElapsed),
+            totalDays: Math.ceil(totalDays),
             dailyRequired,
             weeklyRequired,
             monthlyRequired,
