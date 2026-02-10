@@ -214,7 +214,7 @@ class GoalTracker {
         if (targetValue > 0 && remaining > 0 && currentValue > 0 && timeElapsed > 0) {
             // Project completion assuming the current average daily rate (elapsed days) continues.
             const averageDailyRate = currentValue / timeElapsed;
-            if (Number.isFinite(averageDailyRate) && averageDailyRate > 0) {
+            if (Number.isFinite(averageDailyRate)) {
                 const daysToComplete = remaining / averageDailyRate;
                 expectedCompletionDate = new Date(now.getTime() + (daysToComplete * MS_PER_DAY));
             }
