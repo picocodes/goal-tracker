@@ -210,9 +210,10 @@ class GoalTracker {
             if (remaining === 0) {
                 expectedCompletionDate = new Date(now);
             } else if (currentValue > 0 && timeElapsed > 0) {
-                const dailyRate = currentValue / timeElapsed;
-                if (Number.isFinite(dailyRate) && dailyRate > 0) {
-                    const daysToComplete = remaining / dailyRate;
+                // Project completion assuming the current average daily rate continues.
+                const averageDailyRate = currentValue / timeElapsed;
+                if (Number.isFinite(averageDailyRate) && averageDailyRate > 0) {
+                    const daysToComplete = remaining / averageDailyRate;
                     expectedCompletionDate = new Date(now.getTime() + (daysToComplete * MS_PER_DAY));
                 }
             }
