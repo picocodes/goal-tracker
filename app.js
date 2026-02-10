@@ -162,6 +162,11 @@ class GoalTracker {
         
         // Update days left
         document.getElementById('daysLeft').textContent = progress.daysLeft;
+
+        // Update expected completion date
+        document.getElementById('expectedCompletionDate').textContent = progress.expectedCompletionDate
+            ? this.formatDateInput(progress.expectedCompletionDate)
+            : 'Not enough data';
         
         // Update status
         this.updateStatus(progress);
@@ -199,6 +204,20 @@ class GoalTracker {
         // Total days for the goal
         const totalDays = Math.max(1, (targetDate - createdAt) / MS_PER_DAY);
 
+        // Expected completion date based on current rate
+        let expectedCompletionDate = null;
+        if (targetValue > 0) {
+            if (remaining === 0) {
+                expectedCompletionDate = new Date(now);
+            } else if (currentValue > 0 && timeElapsed > 0) {
+                const dailyRate = currentValue / timeElapsed;
+                if (dailyRate > 0) {
+                    const daysToComplete = remaining / dailyRate;
+                    expectedCompletionDate = new Date(now.getTime() + (daysToComplete * MS_PER_DAY));
+                }
+            }
+        }
+
         // Calculate required contribution rates
         const dailyRequired = daysLeft > 0 ? remaining / daysLeft : 0;
         const weeklyRequired = daysLeft > 0 ? dailyRequired * this.DAYS_PER_WEEK : 0;
@@ -229,6 +248,7 @@ class GoalTracker {
             weeklyRequired,
             monthlyRequired,
             expectedProgress,
+            expectedCompletionDate,
             status
         };
     }
